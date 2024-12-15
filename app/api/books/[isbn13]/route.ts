@@ -3,11 +3,11 @@ import { get, ref, remove, update } from "firebase/database";
 
 import { database } from "@/app/firebase/firebaseConfig";
 
-export const GET = async (
-  req: NextRequest,
-  { params }: { params: { isbn13: string } }
-) => {
-  const { isbn13 } = params;
+export async function GET(
+  request: NextRequest,
+  context: { params: { isbn13: string } }
+) {
+  const { isbn13 } = context.params;
 
   try {
     const bookRef = ref(database, `/bookdata/${isbn13}`);
@@ -22,25 +22,22 @@ export const GET = async (
       );
     }
   } catch (error) {
-    if (error instanceof Error) {
-      return NextResponse.json(
-        { message: "데이터를 불러오는 데 실패했습니다.", error: error.message },
-        { status: 500 }
-      );
-    }
     return NextResponse.json(
-      { message: "알 수 없는 오류가 발생했습니다.", error: "Unknown error" },
+      {
+        message: "데이터를 불러오는 데 실패했습니다.",
+        error: error instanceof Error ? error.message : "Unknown error",
+      },
       { status: 500 }
     );
   }
-};
+}
 
-export const PUT = async (
-  req: NextRequest,
-  { params }: { params: { isbn13: string } }
-) => {
-  const { isbn13 } = params;
-  const updatedData = await req.json();
+export async function PUT(
+  request: NextRequest,
+  context: { params: { isbn13: string } }
+) {
+  const { isbn13 } = context.params;
+  const updatedData = await request.json();
 
   const validData: {
     title?: string;
@@ -71,25 +68,21 @@ export const PUT = async (
       { status: 200 }
     );
   } catch (error) {
-    if (error instanceof Error) {
-      return NextResponse.json(
-        { message: "책 정보 수정에 실패했습니다.", error: error.message },
-        { status: 500 }
-      );
-    }
-
     return NextResponse.json(
-      { message: "알 수 없는 오류가 발생했습니다.", error: "Unknown error" },
+      {
+        message: "책 정보 수정에 실패했습니다.",
+        error: error instanceof Error ? error.message : "Unknown error",
+      },
       { status: 500 }
     );
   }
-};
+}
 
-export const DELETE = async (
-  req: NextRequest,
-  { params }: { params: { isbn13: string } }
-) => {
-  const { isbn13 } = params;
+export async function DELETE(
+  request: NextRequest,
+  context: { params: { isbn13: string } }
+) {
+  const { isbn13 } = context.params;
 
   try {
     const bookRef = ref(database, `/bookdata/${isbn13}`);
@@ -108,16 +101,12 @@ export const DELETE = async (
       );
     }
   } catch (error) {
-    if (error instanceof Error) {
-      return NextResponse.json(
-        { message: "책 삭제에 실패했습니다.", error: error.message },
-        { status: 500 }
-      );
-    }
-
     return NextResponse.json(
-      { message: "알 수 없는 오류가 발생했습니다.", error: "Unknown error" },
+      {
+        message: "책 삭제에 실패했습니다.",
+        error: error instanceof Error ? error.message : "Unknown error",
+      },
       { status: 500 }
     );
   }
-};
+}
