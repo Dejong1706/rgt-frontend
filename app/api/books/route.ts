@@ -76,9 +76,26 @@ export const POST = async (req: NextRequest) => {
       saleAmount,
       link,
     });
-
     return NextResponse.json(
-      { message: "책이 성공적으로 추가되었습니다." },
+      {
+        message: "책이 성공적으로 추가되었습니다.",
+        newBook: {
+          isbn13,
+          title,
+          author,
+          categoryId,
+          categoryName,
+          cover,
+          description,
+          priceSales,
+          priceStandard,
+          pubDate,
+          publisher,
+          remainAmount,
+          saleAmount,
+          link,
+        },
+      },
       { status: 200 }
     );
   } catch (error) {
