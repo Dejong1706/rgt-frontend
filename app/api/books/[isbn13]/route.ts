@@ -5,9 +5,9 @@ import { database } from "@/app/firebase/firebaseConfig";
 
 export async function GET(
   request: NextRequest,
-  context: { params: { isbn13: string } }
-) {
-  const { isbn13 } = context.params;
+  { params }: { params: Promise<{ isbn13: string }> }
+): Promise<NextResponse> {
+  const { isbn13 } = await params;
 
   try {
     const bookRef = ref(database, `/bookdata/${isbn13}`);
@@ -34,9 +34,9 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  context: { params: { isbn13: string } }
+  { params }: { params: Promise<{ isbn13: string }> }
 ) {
-  const { isbn13 } = context.params;
+  const { isbn13 } = await params;
   const updatedData = await request.json();
 
   const validData: {
@@ -80,9 +80,9 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  context: { params: { isbn13: string } }
+  { params }: { params: Promise<{ isbn13: string }> }
 ) {
-  const { isbn13 } = context.params;
+  const { isbn13 } = await params;
 
   try {
     const bookRef = ref(database, `/bookdata/${isbn13}`);

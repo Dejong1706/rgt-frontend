@@ -1,6 +1,6 @@
 "use client";
 
-import LoginPage from "./login/page";
+import LoginModal from "./components/loginModal";
 import { useState } from "react";
 
 export default function Home() {
@@ -26,7 +26,7 @@ export default function Home() {
       >
         <p className="text-[1.5rem]">LOGIN</p>
       </button>
-      {loginModalOpen && <LoginPage closeModal={handleCloseModal} />}
+      {loginModalOpen && <LoginModal closeModal={handleCloseModal} />}
     </div>
   );
 }
